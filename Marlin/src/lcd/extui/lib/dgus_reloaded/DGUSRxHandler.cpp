@@ -508,11 +508,29 @@ void DGUSRxHandler::Probe(DGUS_VP &vp, void *data_ptr) {
     dgus_screen_handler.SetStatusMessagePGM(DGUS_MSG_BUSY);
     return;
   }
+  
+  #if ENABLED(MESH_BED_LEVELING)
+    dgus_screen_handler.SetStatusMessagePGM(PSTR("Failed: disabled auto leveling"));
+    return;
+  #else
+    #if DGUS_LEVEL_GRID_SIZE == GRID_MAX_POINTS_X * GRID_MAX_POINTS_Y
+      dgus_screen_handler.TriggerScreenChange(DGUS_Screen::LEVELING_PROBING);
+    #else
+      dgus_screen_handler.SetMessageLinePGM(NUL_STR, 1);
+      dgus_screen_handler.SetMessageLinePGM(PSTR("Probing..."), 2);
+      dgus_screen_handler.SetMessageLinePGM(NUL_STR, 3);
+      dgus_screen_handler.SetMessageLinePGM(NUL_STR, 4);
+      dgus_screen_handler.ShowWaitScreen(DGUS_Screen::LEVELING_PROBING);
+    #endif
 
-  dgus_screen_handler.TriggerScreenChange(DGUS_Screen::LEVELING_PROBING);
-
-  queue.enqueue_now_P(PSTR("G29\nM420S1"));
-  queue.enqueue_now_P(DGUS_CMD_EEPROM_SAVE);
+    queue.inject_P(PSTR("M420S1\nM420L15")); // inject_P() avoids to full the standard gcode buffer
+    #if ENABLED(AUTO_BED_LEVELING_UBL)
+      queue.enqueue_now_P(PSTR("G29P1\nG29P3\nG29P5C"));
+    #else
+      queue.enqueue_now_P(PSTR("G29"));
+    #endif
+    queue.enqueue_now_P(DGUS_CMD_EEPROM_SAVE);
+  #endif
 }
 
 void DGUSRxHandler::DisableABL(DGUS_VP &vp, void *data_ptr) {
