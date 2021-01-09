@@ -73,7 +73,8 @@ const char DGUS_MSG_HOMING_REQUIRED[] PROGMEM = "Homing required",
            DGUS_MSG_BUSY[] PROGMEM = "Busy",
            DGUS_MSG_UNDEF[] PROGMEM = "-",
            DGUS_MSG_HOMING[] PROGMEM = "Homing...",
-           DGUS_MSG_FW_OUTDATED[] PROGMEM = "DWIN GUI/OS update required";
+           DGUS_MSG_FW_OUTDATED[] PROGMEM = "DWIN GUI/OS update required",
+           DGUS_MSG_ABL_REQUIRED[] PROGMEM = "Auto bed leveling required";
 
 const char DGUS_CMD_HOME[] PROGMEM = "G28",
            DGUS_CMD_EEPROM_SAVE[] PROGMEM = "M500";

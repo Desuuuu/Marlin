@@ -145,7 +145,8 @@ extern const char DGUS_MSG_HOMING_REQUIRED[],
                   DGUS_MSG_BUSY[],
                   DGUS_MSG_UNDEF[],
                   DGUS_MSG_HOMING[],
-                  DGUS_MSG_FW_OUTDATED[];
+                  DGUS_MSG_FW_OUTDATED[],
+                  DGUS_MSG_ABL_REQUIRED[];
 
 extern const char DGUS_CMD_HOME[],
                   DGUS_CMD_EEPROM_SAVE[];
