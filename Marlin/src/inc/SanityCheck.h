@@ -3204,7 +3204,9 @@ static_assert(   _ARR_TEST(3,0) && _ARR_TEST(3,1) && _ARR_TEST(3,2)
  * Require certain features for DGUS_LCD_UI_RELOADED.
  */
 #if ENABLED(DGUS_LCD_UI_RELOADED)
-  #if HOTENDS < 1
+  #if BUFSIZE < 4
+    #error "DGUS_LCD_UI_RELOADED requires a BUFSIZE of at least 4."
+  #elif HOTENDS < 1
     #error "DGUS_LCD_UI_RELOADED requires at least 1 hotend."
   #elif EXTRUDERS < 1
     #error "DGUS_LCD_UI_RELOADED requires at least 1 extruder."
@@ -3223,6 +3225,6 @@ static_assert(   _ARR_TEST(3,0) && _ARR_TEST(3,1) && _ARR_TEST(3,2)
   #elif DISABLED(BABYSTEP_ZPROBE_OFFSET)
     #error "DGUS_LCD_UI_RELOADED requires BABYSTEP_ZPROBE_OFFSET."
   #elif ENABLED(AUTO_BED_LEVELING_UBL) && DISABLED(UBL_SAVE_ACTIVE_ON_M500)
-    #error "DGUS_LCD_UI_RELOADED requires UBL_SAVE_ACTIVE_ON_M500."
+    #warning "Without UBL_SAVE_ACTIVE_ON_M500, your mesh will not be saved when using the touchscreen."
   #endif
 #endif
