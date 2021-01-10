@@ -45,28 +45,21 @@ void DGUSRxHandler::ScreenChange(DGUS_VP &vp, void *data_ptr) {
   const DGUS_Screen screen = (DGUS_Screen)((uint8_t*)data_ptr)[1];
 
   if (vp.addr == DGUS_Addr::SCREENCHANGE_SD) {
-    bool return_flag = true;
-
     #if ENABLED(SDSUPPORT)
-      #if PIN_EXISTS(SD_DETECT)
-        if (ExtUI::isMediaInserted()) {
-          return_flag = false;
-        }
-      #else
-        card.release();
+      #if !PIN_EXISTS(SD_DETECT)
         card.mount();
-        
-        if (ExtUI::isMediaInserted()) {
-          return_flag = false;
-          dgus_screen_handler.SetStatusMessagePGM(GET_TEXT(MSG_MEDIA_INSERTED));
-        }
       #endif
-    #endif
 
-    if (return_flag) {
+      if (!ExtUI::isMediaInserted()) {
+        dgus_screen_handler.SetStatusMessagePGM(GET_TEXT(MSG_NO_MEDIA));
+        return;
+      }
+
+      card.cdroot();
+    #else
       dgus_screen_handler.SetStatusMessagePGM(GET_TEXT(MSG_NO_MEDIA));
       return;
-    }
+    #endif
   }
 
   if (vp.addr == DGUS_Addr::SCREENCHANGE_Idle
