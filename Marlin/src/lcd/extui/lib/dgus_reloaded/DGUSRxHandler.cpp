@@ -40,6 +40,9 @@
 #if ENABLED(POWER_LOSS_RECOVERY)
   #include "../../../../feature/powerloss.h"
 #endif
+#if ENABLED(SDSUPPORT)
+  #include "../../../../sd/cardreader.h"
+#endif
 
 void DGUSRxHandler::ScreenChange(DGUS_VP &vp, void *data_ptr) {
   const DGUS_Screen screen = (DGUS_Screen)((uint8_t*)data_ptr)[1];
