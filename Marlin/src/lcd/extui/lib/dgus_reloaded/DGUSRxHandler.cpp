@@ -62,6 +62,12 @@ void DGUSRxHandler::ScreenChange(DGUS_VP &vp, void *data_ptr) {
     #endif
   }
 
+  #if ENABLED(SDSUPPORT) && PIN_EXISTS(SD_DETECT)
+    if (screen >= PRINT && screen <= PRINT_FINISHED) {
+      queue.enqueue_now_P(PSTR("M22"));
+    }
+  #endif
+
   if (vp.addr == DGUS_Addr::SCREENCHANGE_Idle
       && (printingIsActive() || printingIsPaused())) {
     dgus_screen_handler.SetStatusMessagePGM(PSTR("Impossible while printing"));
